@@ -1,23 +1,33 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import './index.css';
 import {
   IconPhone, IconWhatsapp, IconMapPin, IconClock,
   IconLeaf, IconShield, IconCheck, IconScale,
-  IconWheat, IconChakki, IconStar, IconMenu, IconX
+  IconWheat, IconChakki, IconStar, IconMenu, IconX, IconBag,
 } from "./Icons";
 
 const PHONE     = "+918559958128";
 const PHONE_FMT = "+91 85599 58128";
 const WA        = "https://wa.me/918559958128";
-const MAP       = "https://maps.app.goo.gl/ej6gHT931V5XftsBA";
+const MAP       = "https://maps.app.goo.gl/YG93YwVPuVPAaVCx7";
+const AREA      = "Girdharipura, Jaipur";
 
-/* ── Small reusables ─────────────────────────────────────── */
-function BtnCall({ full = false, inv = false }) {
+/* ── Floating WhatsApp bubble ─────────────────────────── */
+function FloatingWA() {
   return (
-    <a href={`tel:${PHONE}`}
-      className="btn-call"
-      style={full ? { width: "100%", justifyContent: "center" } : {}}
-    >
+    <a href={WA} target="_blank" rel="noopener noreferrer"
+      className="float-wa" aria-label="Chat on WhatsApp">
+      <IconWhatsapp size={24} color="#fff" />
+      <span className="float-wa-label">WhatsApp Us</span>
+    </a>
+  );
+}
+
+/* ── Small reusables ──────────────────────────────────── */
+function BtnCall({ full = false }) {
+  return (
+    <a href={`tel:${PHONE}`} className="btn-call"
+      style={full ? { width: "100%", justifyContent: "center" } : {}}>
       <IconPhone size={15} color="#fff" />
       {PHONE_FMT}
     </a>
@@ -28,15 +38,14 @@ function BtnWa({ full = false }) {
   return (
     <a href={WA} target="_blank" rel="noopener noreferrer"
       className="btn-wa"
-      style={full ? { width: "100%", justifyContent: "center" } : {}}
-    >
+      style={full ? { width: "100%", justifyContent: "center" } : {}}>
       <IconWhatsapp size={16} color="#fff" />
       WhatsApp
     </a>
   );
 }
 
-/* ── App ─────────────────────────────────────────────────── */
+/* ── App ──────────────────────────────────────────────── */
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -53,13 +62,16 @@ export default function App() {
   };
 
   const navLinks = [
-    { label: "Rates", id: "rates" },
-    { label: "About", id: "about" },
-    { label: "Contact", id: "contact" },
+    { label: "How It Works", id: "how"     },
+    { label: "Rates",        id: "rates"   },
+    { label: "About",        id: "about"   },
+    { label: "Contact",      id: "contact" },
   ];
 
   return (
     <div style={{ fontFamily: "'Nunito', sans-serif", background: "#FDFAF4", color: "#1C1008" }}>
+
+      <FloatingWA />
 
       {/* ══ NAV ════════════════════════════════════════════ */}
       <nav style={{
@@ -85,12 +97,12 @@ export default function App() {
                 Yatendra Desi Chakki
               </div>
               <div style={{ fontSize: "0.58rem", color: "#7C3D0F", fontFamily: "'Poppins', sans-serif", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>
-                Fresh Atta · Jaipur
+                Fresh Atta · {AREA}
               </div>
             </div>
           </div>
 
-          {/* Desktop */}
+          {/* Desktop links */}
           <div className="desktop-only" style={{ display: "flex", alignItems: "center", gap: 28 }}>
             {navLinks.map(l => (
               <button key={l.id} className="nav-link" onClick={() => go(l.id)}>{l.label}</button>
@@ -98,15 +110,14 @@ export default function App() {
             <BtnCall />
           </div>
 
-          {/* Hamburger */}
-          <button className="ham-btn" onClick={() => setMenuOpen(!menuOpen)}
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            style={{ display: "none" }}
-            ref={el => { if (el) el.style.display = window.innerWidth <= 900 ? "flex" : "none"; }}>
+          {/* Hamburger — CSS-driven visibility */}
+          <button className="ham-btn mobile-only" onClick={() => setMenuOpen(!menuOpen)}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}>
             {menuOpen ? <IconX size={22} color="#1C1008" /> : <IconMenu size={22} color="#1C1008" />}
           </button>
         </div>
 
+        {/* Mobile drawer */}
         {menuOpen && (
           <div style={{
             background: "#fff", borderTop: "1px solid #E8D4B0",
@@ -126,15 +137,15 @@ export default function App() {
         )}
       </nav>
 
-      {/* ══ HERO ═══════════════════════════════════════════ */}
+      {/* ══ HERO ════════════════════════════════════════════ */}
       <section id="home" className="section" style={{ paddingTop: 56, paddingBottom: 48 }}>
         <div className="container hero-grid">
 
           {/* Text */}
           <div>
             <span className="tag">
-              <IconMapPin size={11} color="#7C3D0F" style={{ marginRight: 4 }} />
-              &nbsp;Jaipur, Rajasthan
+              <IconMapPin size={11} color="#7C3D0F" style={{ marginRight: 4, verticalAlign: "middle" }} />
+              {AREA}, Rajasthan
             </span>
 
             <div style={{
@@ -187,7 +198,6 @@ export default function App() {
           {/* Visual */}
           <div className="hero-visual" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             <div style={{ position: "relative", width: 300, height: 300 }}>
-              {/* Outer ring */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: "50%",
                 background: "conic-gradient(from 0deg, #F5E6CC, #D4A96A, #F5E6CC, #C8893A, #F5E6CC)",
@@ -199,7 +209,7 @@ export default function App() {
                   display: "flex", flexDirection: "column",
                   alignItems: "center", justifyContent: "center", gap: 10,
                 }}>
-                  <div className="spin" style={{ color: "#7C3D0F" }}>
+                  <div className="spin">
                     <IconChakki size={80} color="#7C3D0F" />
                   </div>
                   <div style={{
@@ -213,11 +223,11 @@ export default function App() {
 
               {/* Price floaters */}
               {[
-                { style: { top: "-8%", left: "50%", transform: "translateX(-50%)" }, label: "Desi Atta", price: "₹37 / kg" },
-                { style: { bottom: "-8%", left: "50%", transform: "translateX(-50%)" }, label: "Gehu Pisai", price: "₹3.5 / kg" },
+                { pos: { top: "-8%", left: "50%", transform: "translateX(-50%)" }, label: "Desi Atta",  price: "₹37 / kg"  },
+                { pos: { bottom: "-8%", left: "50%", transform: "translateX(-50%)" }, label: "Gehu Pisai", price: "₹3.5 / kg" },
               ].map(item => (
                 <div key={item.label} style={{
-                  position: "absolute", ...item.style,
+                  position: "absolute", ...item.pos,
                   background: "#7C3D0F", color: "#fff",
                   borderRadius: 8, padding: "8px 16px",
                   textAlign: "center", whiteSpace: "nowrap",
@@ -240,7 +250,7 @@ export default function App() {
       <div style={{ background: "#F5E6CC", borderTop: "1px solid #E8D4B0", borderBottom: "1px solid #E8D4B0", padding: "15px 20px" }}>
         <div className="trust-bar-inner container" style={{ display: "flex", justifyContent: "center", gap: 24, flexWrap: "wrap" }}>
           {[
-            [IconCheck,  "Pure Jaggery"],
+            [IconCheck,  "No Adulteration"],
             [IconWheat,  "100% Desi Gehu"],
             [IconLeaf,   "No Chemicals"],
             [IconShield, "No Mixing"],
@@ -254,6 +264,68 @@ export default function App() {
         </div>
       </div>
 
+      {/* ══ HOW IT WORKS ═══════════════════════════════════ */}
+      <section id="how" className="section section-alt">
+        <div className="container">
+          <div style={{ textAlign: "center", marginBottom: 44 }}>
+            <span className="tag">Simple Process</span>
+            <h2 className="section-heading">Kaise Kaam Karta Hai?</h2>
+            <p style={{ color: "#6B4A28", marginTop: 10, fontSize: "0.95rem" }}>
+              Teen aasaan steps mein fresh atta ghar le jao.
+            </p>
+          </div>
+
+          <div className="how-steps">
+            {[
+              {
+                num: "01", Icon: IconWheat,
+                title: "Gehu Leke Aao",
+                body:  "Apna desi gehun leke aao. Koi minimum quantity nahi — 1 kg se le ke 100 kg tak sab chalega.",
+              },
+              {
+                num: "02", Icon: IconChakki,
+                title: "Hum Pisenge",
+                body:  "Hamare pathar chakki par gehun dheere aur thandak mein pisega — bran, oils, aur nutrition sab intact.",
+              },
+              {
+                num: "03", Icon: IconBag,
+                title: "Taaza Atta Le Jao",
+                body:  "Seedha chakki se, bilkul taaza. Koi milawat nahi, koi preservative nahi. Bas shuddh desi atta.",
+              },
+            ].map((s, i) => (
+              <Fragment key={s.num}>
+                <div className="how-card">
+                  <div className="how-num">{s.num}</div>
+                  <div style={{
+                    width: 68, height: 68, borderRadius: "50%",
+                    background: "#F5E6CC",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    margin: "0 auto 18px", position: "relative", zIndex: 1,
+                  }}>
+                    <s.Icon size={32} color="#7C3D0F" />
+                  </div>
+                  <h3 style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, fontSize: "1rem", color: "#1C1008", marginBottom: 10 }}>
+                    {s.title}
+                  </h3>
+                  <p style={{ fontSize: "0.84rem", color: "#6B4A28", lineHeight: 1.72 }}>
+                    {s.body}
+                  </p>
+                </div>
+                {i < 2 && (
+                  <div className="how-arrow">
+                    <svg width={28} height={28} viewBox="0 0 24 24" fill="none"
+                      stroke="#C8893A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"/>
+                      <polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                  </div>
+                )}
+              </Fragment>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ══ RATES ══════════════════════════════════════════ */}
       <section id="rates" className="section section-dark">
         <div className="container">
@@ -266,7 +338,6 @@ export default function App() {
           </div>
 
           <div className="rates-grid">
-
             {/* Atta */}
             <div className="rate-card featured">
               <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
@@ -367,15 +438,15 @@ export default function App() {
           {/* Right */}
           <div>
             {[
-              { Icon: IconWheat,  title: "Pure Gehu, Nothing Else",   body: "We don't mix maida, starch, or any additive. What you bring is what you get — just ground finer on stone." },
-              { Icon: IconChakki, title: "Stone Chakki, Slow Grind",  body: "Slow grinding keeps nutrients intact. No heat damage, no nutrient loss — just proper atta." },
-              { Icon: IconScale,  title: "Lowest Rate in the Area",   body: "₹37/kg for atta and ₹3.5/kg for pisai. No hidden charges, no minimum order." },
-              { Icon: IconClock,  title: "Open Every Single Day",     body: "Monday to Sunday from 4:30 PM. No holidays — because hunger doesn't take a day off." },
+              { Icon: IconWheat,  title: "Pure Gehu, Nothing Else",  body: "We don't mix maida, starch, or any additive. What you bring is what you get — just ground finer on stone." },
+              { Icon: IconChakki, title: "Stone Chakki, Slow Grind", body: "Slow grinding keeps nutrients intact. No heat damage, no nutrient loss — just proper atta." },
+              { Icon: IconScale,  title: "Lowest Rate in the Area",  body: "₹37/kg for atta and ₹3.5/kg for pisai. No hidden charges, no minimum order." },
+              { Icon: IconClock,  title: "Open Every Single Day",    body: "Monday to Sunday from 4:30 PM. No holidays — because hunger doesn't take a day off." },
             ].map((f, i) => (
               <div key={f.title} className="feat-row" style={{ borderBottom: i < 3 ? "1px solid #E8D4B0" : "none" }}>
                 <div style={{
                   width: 42, height: 42, borderRadius: 10,
-                  background: "#F5E6CC", color: "#7C3D0F",
+                  background: "#F5E6CC",
                   display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
                 }}>
                   <f.Icon size={20} color="#7C3D0F" />
@@ -403,9 +474,9 @@ export default function App() {
           </div>
           <div className="review-grid">
             {[
-              { name: "Ramesh Sharma",  text: "Bahut badhiya chakki hai. Atta bilkul sahi milta hai, koi mixing nahi. Roz yahan se lete hain.", role: "Regular customer" },
-              { name: "Sunita Devi",    text: "Pisai rate bhi sahi hai aur atta fresh milta hai. Bachon ko ghar ki roti mein fark dikha.",     role: "Regular customer" },
-              { name: "Mahesh Gupta",   text: "Bulk mein lete hain dukaan ke liye. Rate acha hai, quality consistent rehti hai.",               role: "Wholesale buyer" },
+              { name: "Ramesh Sharma",  role: "Regular customer",  text: "Bahut badhiya chakki hai. Atta bilkul sahi milta hai, koi mixing nahi. Roz yahan se lete hain." },
+              { name: "Sunita Devi",    role: "Regular customer",  text: "Pisai rate bhi sahi hai aur atta fresh milta hai. Bachon ko ghar ki roti mein fark dikha." },
+              { name: "Mahesh Gupta",   role: "Wholesale buyer",   text: "Bulk mein lete hain dukaan ke liye. Rate acha hai, quality consistent rehti hai." },
             ].map(r => (
               <div key={r.name} className="review-card">
                 <div style={{ display: "flex", gap: 3, marginBottom: 12 }}>
@@ -454,7 +525,7 @@ export default function App() {
               background: "#fff", color: "#7C3D0F",
               borderRadius: 9, fontFamily: "'Poppins', sans-serif", fontWeight: 800,
               fontSize: "0.97rem", padding: "14px 28px", textDecoration: "none",
-              boxShadow: "0 3px 14px rgba(0,0,0,.18)", transition: "transform .14s",
+              boxShadow: "0 3px 14px rgba(0,0,0,.18)",
             }}>
               <IconPhone size={14} color="#7C3D0F" />
               {PHONE_FMT}
@@ -473,10 +544,10 @@ export default function App() {
           </div>
           <div className="contact-grid">
             {[
-              { Icon: IconPhone,  label: "Phone",    val: PHONE_FMT, href: `tel:${PHONE}` },
-              { Icon: IconWhatsapp, label: "WhatsApp", val: PHONE_FMT, href: WA },
-              { Icon: IconMapPin, label: "Location", val: "Jaipur, Rajasthan", href: MAP },
-              { Icon: IconClock,  label: "Timings",  val: "4:30 PM onwards\nMon – Sun", href: null },
+              { Icon: IconPhone,    label: "Phone",     val: PHONE_FMT,                        href: `tel:${PHONE}` },
+              { Icon: IconWhatsapp, label: "WhatsApp",  val: PHONE_FMT,                        href: WA             },
+              { Icon: IconMapPin,   label: "Location",  val: `${AREA}\nJaipur, Rajasthan`,     href: MAP            },
+              { Icon: IconClock,    label: "Timings",   val: "4:30 PM onwards\nMon – Sun",     href: null           },
             ].map(c => (
               <div key={c.label} className="contact-card">
                 <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
@@ -489,7 +560,7 @@ export default function App() {
                   <a href={c.href}
                     target={c.href.startsWith("http") ? "_blank" : undefined}
                     rel="noopener noreferrer"
-                    style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, color: "#7C3D0F", fontSize: "0.88rem", textDecoration: "none", lineHeight: 1.4 }}>
+                    style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, color: "#7C3D0F", fontSize: "0.88rem", textDecoration: "none", lineHeight: 1.55, whiteSpace: "pre-line", display: "block" }}>
                     {c.val}
                   </a>
                 ) : (
@@ -500,6 +571,21 @@ export default function App() {
               </div>
             ))}
           </div>
+
+          {/* Map CTA */}
+          <div style={{ marginTop: 32, textAlign: "center" }}>
+            <a href={MAP} target="_blank" rel="noopener noreferrer"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                background: "#F5E6CC", color: "#7C3D0F",
+                borderRadius: 9, fontFamily: "'Poppins', sans-serif", fontWeight: 700,
+                fontSize: "0.92rem", padding: "12px 24px", textDecoration: "none",
+                border: "1.5px solid #E8D4B0",
+              }}>
+              <IconMapPin size={16} color="#7C3D0F" />
+              Open in Google Maps — {AREA}
+            </a>
+          </div>
         </div>
       </section>
 
@@ -507,13 +593,13 @@ export default function App() {
       <footer style={{ background: "#0F0804", padding: "26px 20px" }}>
         <div className="container" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 14 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ color: "#C8893A" }}><IconChakki size={22} color="#C8893A" /></div>
+            <IconChakki size={22} color="#C8893A" />
             <div>
               <div style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 900, color: "#fff", fontSize: "0.9rem" }}>
                 Yatendra Desi Chakki
               </div>
               <div style={{ fontSize: "0.58rem", color: "#C8893A", fontFamily: "'Poppins', sans-serif", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em" }}>
-                Jaipur, Rajasthan
+                {AREA}, Rajasthan
               </div>
             </div>
           </div>
