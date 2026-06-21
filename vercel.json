@@ -1,0 +1,4 @@
+{
+  "name": "attachakki",
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+}
